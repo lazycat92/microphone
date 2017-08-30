@@ -27,6 +27,8 @@
 		<div id="voice">开始吹牛逼吧！</div>
 		<script type="text/javascript">
 			var box = document.getElementById("voice");
+			var microphone = navigator.mediaDevices.getUserMedia
+			box.innerHTML = navigator.mediaDevices.getUserMedia;
 			if(navigator.mediaDevices.getUserMedia) {
 				box.innerHTML = "支持麦克风";
 			} else {
