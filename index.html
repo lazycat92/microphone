@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>麦克风</title>
+   	<style type="text/css">
+   		body {
+   			margin: 0;
+   			padding: 0;
+   		}
+   		#voice {
+   			width: 100%;
+   			height: 100vh;
+   			text-align: center;
+   			background: #eee;
+   			display: -webkit-box;
+   			-webkit-box-align: center;
+   			-webkit-box-pack: center;
+   		}
+   	</style>
+</head>
+<body>
+	<div id="voice">开始吹牛逼吧！</div>
+	<script type="text/javascript">
+		var box = document.getElementById("voice");
+		navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+		if(!navigator.getUserMedia) {
+			box.innerHTML = "您的设备不支持麦克风";
+		} else{
+			navigator.getUserMedia({audio: true}, onSuccess, onError);
+		}
+		
+		function onError() {
+			box.innerHTML = "获取麦克风出问题了";
+		}
+		
+		function onSuccess(stream){
+			audioContext = window.AudioContext || window.webkitAudioContext;
+			context 	 = new audioContext();	// 创建一个管理、播放声音的对象
+			liveSource	 = context.createMediaStreamSource(stream);		// 将麦克风的声音输入这个对象
+			var levelChecker = context.createScriptProcessor(4096, 1, 1);  // 创建一个音频分析对象，采样的缓冲区大小为4096， 输入和输出都是单声道
+			liveSource.connect(levelChecker);  	// 将该分析对象与麦克风音频进行连接
+			levelChecker.onaudioprocess = function(e) {		// 开始处理音频
+				var buffer = e.inputBuffer.getChannelData(0);  // 获取缓冲区的输入音频，转换为包含了PCM通道数据的32位浮点数组
+				
+				// 创建变量并迭代来获取最大的音量值
+				var maxVal = 0;
+				for(var i = 0; i < buffer.length; i++) {
+					if(maxVal < buffer[i]) {
+						maxVal = buffer[i]
+					}
+				}
+				
+				box.innerHTML = "您的音量值：" + Math.round(maxVal*100);
+				if(maxVal>.5) {
+					// 当音量值大于0.5时，显示“声音太响了”，并断开音频连接
+					box.innerHTML = "您破音了";
+					liveSource.disconnect(levelChecker);
+				}
+			}
+		}
+	</script>
+</body>
+</html>
