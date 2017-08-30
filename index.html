@@ -28,9 +28,9 @@
 		<script type="text/javascript">
 			var box = document.getElementById("voice");
 			if(navigator.mediaDevices.getUserMedia) {
-				alert("支持麦克风");
+				box.innerHTML = "支持麦克风";
 			} else {
-				alert("不支持麦克风");
+				box.innerHTML = "不支持麦克风";
 			}
 			
 //			var promisifiedOldGUM = function(constraints) {
