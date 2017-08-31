@@ -54,12 +54,16 @@
 				}
 				
 				box.innerHTML = "您的音量值：" + Math.round(maxVal*100);
-				if(maxVal>.5) {
-					// 当音量值大于0.5时，显示“声音太响了”，并断开音频连接
-					box.innerHTML = "您破音了";
-					liveSource.disconnect(levelChecker);
-				}
+//				if(maxVal>.5) {
+//					// 当音量值大于0.5时，显示“声音太响了”，并断开音频连接
+//					box.innerHTML = "您破音了";
+//					liveSource.disconnect(levelChecker);
+//				}
 			}
+			setTimeout(function(){
+					box.innerHTML = "结束了";
+					liveSource.disconnect(levelChecker);
+				}, 2000);
 		}
 	</script>
 </body>
