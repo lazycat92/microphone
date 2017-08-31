@@ -1,40 +1,54 @@
-<!DOCTYPE html>
-<html>
-
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-		<title>麦克风</title>
-	</head>
-
-	<body>
-		<input type="file" accept="audio/*;capture=microphone"> 
-		<script type="text/javascript">
-			var microphone = navigator.mediaDevices.getUserMedia;
-			try {
-				if(microphone) {
-				document.getElementById("content").innerHTML = "支持";
-				navigator.mediaDevices.getUserMedia({
-						audio: true
-					})
-					.then(function(mediaStream) {
-						var video = document.querySelector('video');
-						video.src = window.URL.createObjectURL(mediaStream);
-						video.onloadedmetadata = function(e) {
-							// Do something with the video here.
-							document.getElementById("content").innerHTML = "！！";
-						};
-					})
-					.catch(function(error) {
-						alert(error.name);
-					})
-			} else {
-				document.getElementById("content").innerHTML = "不支持";
-			}
-			} catch(e) {
-				document.getElementById("content").innerHTML = "出问题了";
-			}
-		</script>
-	</body>
-
-</html>
+<!DOCTYPE html>  
+<html>  
+  <head>  
+    <title>HTML5获取麦克风音频,输出到扬声器</title>  
+    <meta charset="UTF-8">  
+    <meta name="keywords" content="keyword1,keyword2,keyword3">  
+    <meta name="description" content="this is my page">  
+    <meta name="content-type" content="text/html; charset=UTF-8">  
+    
+  </head>  
+  <body>  
+    This is my HTML page. <br> 
+    	<p id="feedback"></p>
+    	<script type="text/javascript">  
+    		var content = document.getElementById("feedback");
+        var audioCtx;  
+        try  
+        {  
+            audioCtx=new (window.AudioContext || window.webkitAudioContext)();  
+        }  
+        catch(e)  
+        {  
+            content.innerHTML = "Your browser does not support AudioContext!";  
+        }  
+        navigator.getUserMedia=(navigator.getUserMedia || navigator.webkitGetUserMedia ||   
+                                navigator.mozGetUserMedia || navigator.msGetUserMedia);  
+        if(navigator.getUserMedia)   
+        {  
+            navigator.getUserMedia(  
+            {  
+                audio:true  
+            },  
+            function(stream)  
+            {  
+                var source=audioCtx.createMediaStreamSource(stream);  
+                var biquadFilter=audioCtx.createBiquadFilter();  
+                biquadFilter.type="lowshelf";  
+                biquadFilter.frequency.value=1000;  
+                biquadFilter.gain.value=25;  
+                source.connect(biquadFilter);  
+                biquadFilter.connect(audioCtx.destination);  
+            },  
+            function(err)  
+            {  
+                content.innerHTML = "The following gUM error occured: "+ err;  
+            });  
+        }  
+        else   
+        {  
+              content.innerHTML = "getUserMedia not supported on your browser!" ;  
+        }  
+    </script>  
+  </body>  
+</html>  
