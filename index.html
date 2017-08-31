@@ -22,8 +22,10 @@
 </head>
 <body>
 	<div id="voice">开始吹牛逼吧！</div>
+	<audio src=""></audio>
 	<script type="text/javascript">
 		var box = document.getElementById("voice");
+		var voice = document.getElementsByTagName(audio)[0];
 		
 		navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
 		if(!navigator.getUserMedia) {
@@ -40,6 +42,13 @@
 			audioContext = window.AudioContext || window.webkitAudioContext;
 			context 	 = new audioContext();	// 创建一个管理、播放声音的对象
 			liveSource	 = context.createMediaStreamSource(stream);		// 将麦克风的声音输入这个对象
+			voice.src = window.URL.createObjectURL(stream);
+			voice.onloadedmetadata = function(e) {
+			    // Do something with the video here.
+			    box.innerHTML = JSON.stringify(e);
+			    voice.play;
+			  };
+			
 			var levelChecker = context.createScriptProcessor(4096, 1, 1);  // 创建一个音频分析对象，采样的缓冲区大小为4096， 输入和输出都是单声道
 			liveSource.connect(levelChecker);  	// 将该分析对象与麦克风音频进行连接
 			levelChecker.onaudioprocess = function(e) {		// 开始处理音频
