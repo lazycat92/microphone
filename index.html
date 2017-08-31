@@ -12,7 +12,8 @@
 		<p class="content"></p>
 		<script type="text/javascript">
 			var microphone = navigator.mediaDevices.getUserMedia;
-			if(microphone) {
+			try {
+				if(microphone) {
 				document.getElementById("content").innerHTML = "支持";
 				navigator.mediaDevices.getUserMedia({
 						audio: true
@@ -22,6 +23,7 @@
 						video.src = window.URL.createObjectURL(mediaStream);
 						video.onloadedmetadata = function(e) {
 							// Do something with the video here.
+							document.getElementById("content").innerHTML = "！！";
 						};
 					})
 					.catch(function(error) {
@@ -30,6 +32,10 @@
 			} else {
 				document.getElementById("content").innerHTML = "不支持";
 			}
+			} catch(e) {
+				document.getElementById("content").innerHTML = "出问题了";
+			}
+			
 		</script>
 	</body>
 
