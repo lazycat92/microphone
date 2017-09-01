@@ -2,21 +2,75 @@
 <html>
 
 	<head>
-		<title>HTML5获取麦克风音频,输出到扬声器</title>
+		<title>微信录音功能</title>
 		<meta charset="UTF-8">
 		<meta name="keywords" content="keyword1,keyword2,keyword3">
 		<meta name="description" content="this is my page">
 		<meta name="content-type" content="text/html; charset=UTF-8">
-
+		<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时会打印。
+                appId: "wxf182e91b5d8b8e6d", // 必填，公众号的唯一标识
+                timestamp: "1504252342", // 必填，生成签名的时间戳
+                nonceStr: "Bg4EPIsCwpaChbNG", // 必填，生成签名的随机串
+                signature: "7af9e89f967acdaee811bd16d762aefca02cd11b",// 必填，签名，见附录1
+                jsApiList: [
+                     'startRecord', 
+                     'stopRecord', 
+                     'onVoiceRecordEnd', 
+                     'playVoice', 
+                     'pauseVoice', 
+                     'stopVoice', 
+                     'onVoicePlayEnd', 
+                     'uploadVoice', 
+                     'downloadVoice', 
+                     'translateVoice'
+                ]
+            });
+		</script>
 	</head>
 
 	<body>
-		This is my HTML page. <br>
-		<p id="feedback"></p>
+		<p></p>
+		<p id="count"></p>
+		<a href="javascript:;" id="btn-record">按住录音</a>
 		<script type="text/javascript">
-			var content = document.getElementById("feedback");
-			for(var i in navigator) {
-				content.innerHTML += i + "\n"
+			window.onload = function() {
+				var btn = document.getElementById("btn-record");
+				var count = document.getElementById("count");
+				var words = document.getElementsByTagName("p")[0];
+				var timer, n;
+				wx.ready(function() {
+					btn.addEventListener("touchstart", beginRecord, true);
+					btn.addEventListener("touchend", endRecord, true);
+				});
+			}
+			
+			function beginRecord(e) {
+			   wx.startRecord();   
+			   words.innerHTML = "正在录音中";
+			   n = 0;
+			   timer = setInterval(function() {
+			   		if(n < 10) {
+			   			n++;
+			   			count.innerHTML = n + "s";
+			   		} else {
+			   			clearInterval(timer);
+			   			words.innerHTML = "吹牛时间结束！"
+			   		}
+			   }, 1000);
+			}
+			
+			function endRecord(e) {
+				clearInterval(timer);
+				words.innerHTML = "吹牛时间结束！";
+				wx.stopRecord({
+					success: function(res) {
+						words.innerHTML = "录音成功！"
+						alert(JSON.stringify(res));
+					}
+				})
 			}
 		</script>
 	</body>
