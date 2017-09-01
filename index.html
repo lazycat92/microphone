@@ -42,10 +42,12 @@
 				var words = document.getElementsByTagName("p")[0];
 				var timer, n;
 				alert("11");
-				wx.ready(function() {
-					btn.addEventListener("touchstart", beginRecord, true);
-					btn.addEventListener("touchend", endRecord, true);
-				});
+				btn.addEventListener("touchstart", beginRecord, true);
+				btn.addEventListener("touchend", endRecord, true);
+//				wx.ready(function() {
+//					btn.addEventListener("touchstart", beginRecord, true);
+//					btn.addEventListener("touchend", endRecord, true);
+//				});
 			};
 			
 			function beginRecord(e) {
