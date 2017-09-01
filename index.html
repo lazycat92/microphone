@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<title>微信录音功能</title>
 		<meta charset="UTF-8">
@@ -9,25 +10,30 @@
 		<meta name="content-type" content="text/html; charset=UTF-8">
 		<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
+			var t = new Date();
+			var year = t.getFullYear(),
+				month = t.getMonth() + 1,
+				day = t.getDate();
+			console.log(Date.UTC(year, month, day));
 			wx.config({
-                debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时会打印。
-                appId: "wxf182e91b5d8b8e6d", // 必填，公众号的唯一标识
-                timestamp: "1504252342", // 必填，生成签名的时间戳
-                nonceStr: "Bg4EPIsCwpaChbNG", // 必填，生成签名的随机串
-                signature: "7af9e89f967acdaee811bd16d762aefca02cd11b",// 必填，签名，见附录1
-                jsApiList: [
-                     'startRecord', 
-                     'stopRecord', 
-                     'onVoiceRecordEnd', 
-                     'playVoice', 
-                     'pauseVoice', 
-                     'stopVoice', 
-                     'onVoicePlayEnd', 
-                     'uploadVoice', 
-                     'downloadVoice', 
-                     'translateVoice'
-                ]
-            });
+				debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时会打印。
+				appId: "wx0bf7e03c3197b6f1", // 必填，公众号的唯一标识
+				timestamp: Date.UTC(year, month, day), // 必填，生成签名的时间戳
+				nonceStr: "Bg4EPIsCwpaChbNG", // 必填，生成签名的随机串
+				signature: "7af9e89f967acdaee811bd16d762aefca02cd11b", // 必填，签名，见附录1
+				jsApiList: [
+					'startRecord',
+					'stopRecord',
+					'onVoiceRecordEnd',
+					'playVoice',
+					'pauseVoice',
+					'stopVoice',
+					'onVoicePlayEnd',
+					'uploadVoice',
+					'downloadVoice',
+					'translateVoice'
+				]
+			});
 		</script>
 	</head>
 
@@ -36,38 +42,44 @@
 		<p id="count"></p>
 		<a href="javascript:;" id="btn-record">按住录音</a>
 		<script type="text/javascript">
-		
-				var btn = document.getElementById("btn-record");
-				var count = document.getElementById("count");
-				var words = document.getElementsByTagName("p")[0];
-				words.innerHTML = "www";
-				var timer, n;
-				alert("11");
-//				btn.addEventListener("touchstart", beginRecord, true);
-//				btn.addEventListener("touchend", endRecord, true);
-				wx.ready(function() {
-					alert("22");
-					btn.addEventListener("touchstart", beginRecord, true);
-					btn.addEventListener("touchend", endRecord, true);
-				});
-			
+			var btn = document.getElementById("btn-record");
+			var count = document.getElementById("count");
+			var words = document.getElementsByTagName("p")[0];
+			words.innerHTML = "www";
+			var timer, n;
+			//				btn.addEventListener("touchstart", beginRecord, true);
+			//				btn.addEventListener("touchend", endRecord, true);
+			wx.ready(function() {
+				btn.addEventListener("touchstart", beginRecord, true);
+				btn.addEventListener("touchend", endRecord, true);
+			});
+
 			function beginRecord(e) {
-				alert("dd");
 				e.preventDefault();
-			   wx.startRecord();   
-			   words.innerHTML = "正在录音中";
-			   n = 0;
-			   timer = setInterval(function() {
-			   		if(n < 10) {
-			   			n++;
-			   			count.innerHTML = n + "s";
-			   		} else {
-			   			clearInterval(timer);
-			   			words.innerHTML = "吹牛时间结束！"
-			   		}
-			   }, 1000);
+				wx.startRecord({
+					success: function(res) {
+						alert("调接口成功");
+					},
+					fail: function(res) {
+						alert(res);
+					},
+					complete: function(res) {
+						words.innerHTML = "调接口结束！";
+					}
+				});
+				words.innerHTML = "正在录音中";
+				n = 0;
+				timer = setInterval(function() {
+					if(n < 10) {
+						n++;
+						count.innerHTML = n + "s";
+					} else {
+						clearInterval(timer);
+						words.innerHTML = "吹牛时间结束！"
+					}
+				}, 1000);
 			}
-			
+
 			function endRecord(e) {
 				e.preventDefault();
 				clearInterval(timer);
@@ -79,6 +91,7 @@
 					}
 				})
 			}
-	</script>
-</body>
+		</script>
+	</body>
+
 </html>
