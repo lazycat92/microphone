@@ -41,6 +41,7 @@
 				var count = document.getElementById("count");
 				var words = document.getElementsByTagName("p")[0];
 				var timer, n;
+				alert("11");
 				wx.ready(function() {
 					btn.addEventListener("touchstart", beginRecord, true);
 					btn.addEventListener("touchend", endRecord, true);
@@ -48,6 +49,8 @@
 			};
 			
 			function beginRecord(e) {
+				alert("dd");
+				e.preventDefault();
 			   wx.startRecord();   
 			   words.innerHTML = "正在录音中";
 			   n = 0;
@@ -63,6 +66,7 @@
 			}
 			
 			function endRecord(e) {
+				e.preventDefault();
 				clearInterval(timer);
 				words.innerHTML = "吹牛时间结束！";
 				wx.stopRecord({
