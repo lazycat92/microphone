@@ -42,12 +42,13 @@
 				var words = document.getElementsByTagName("p")[0];
 				var timer, n;
 				alert("11");
-				btn.addEventListener("touchstart", beginRecord, true);
-				btn.addEventListener("touchend", endRecord, true);
-//				wx.ready(function() {
-//					btn.addEventListener("touchstart", beginRecord, true);
-//					btn.addEventListener("touchend", endRecord, true);
-//				});
+//				btn.addEventListener("touchstart", beginRecord, true);
+//				btn.addEventListener("touchend", endRecord, true);
+				wx.ready(function() {
+					alert("22");
+					btn.addEventListener("touchstart", beginRecord, true);
+					btn.addEventListener("touchend", endRecord, true);
+				});
 			};
 			
 			function beginRecord(e) {
