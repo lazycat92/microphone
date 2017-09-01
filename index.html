@@ -36,7 +36,7 @@
 		<p id="count"></p>
 		<a href="javascript:;" id="btn-record">按住录音</a>
 		<script type="text/javascript">
-			window.onload = function() {
+		
 				var btn = document.getElementById("btn-record");
 				var count = document.getElementById("count");
 				var words = document.getElementsByTagName("p")[0];
@@ -49,7 +49,6 @@
 					btn.addEventListener("touchstart", beginRecord, true);
 					btn.addEventListener("touchend", endRecord, true);
 				});
-			};
 			
 			function beginRecord(e) {
 				alert("dd");
