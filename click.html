@@ -113,6 +113,8 @@
 			}
 			
 			function resetGame() {
+				this.style.display = "none";
+				clearInterval();
 				count = 0;
 				timing = 0;
 				box.removeChild(document.getElementById("btn_click"));
