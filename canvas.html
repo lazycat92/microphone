@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>我画你猜</title>
+		<style type="text/css">
+			body,
+			h3,
+			p {
+				margin: 0;
+				padding: 0;
+			}
+			
+			a {
+				text-decoration: none;
+				font-size: 12px;
+				color: coral;
+			}
+			
+			.container {
+				background: #f5f5f5;
+				height: 100vh;
+				width: 100vw;
+				box-sizing: border-box;
+				padding: 20px;
+			}
+			
+			#drawing {
+				background: #fff;
+				width: 100%;
+				margin: 10px auto 0;
+			}
+			
+			.input_contents {
+				width: 100%;
+				height: 40px;
+				line-height: 40px;
+				background: rgba(0, 0, 0, .8);
+				margin-bottom: 10px;
+				color: #fff;
+				position: relative;
+				overflow: hidden;
+			}
+			
+			.input_contents p {
+				position: absolute;
+				right: -100%;
+			}
+			
+			.users {
+				background: coral;
+				width: 100%;
+				height: 80px;
+				padding: 10px;
+				box-sizing: border-box;
+				overflow-x: scroll;
+				overflow-y: hidden;
+			}
+			
+			.row {
+				width: 200%;
+				height: 100%;
+			}
+			
+			.user {
+				display: block;
+				float: left;
+				margin-right: 10px;
+				position: relative;
+			}
+			
+			.user input {
+				display: none;
+			}
+			
+			.user input.active {
+				display: block;
+				position: absolute;
+				border: 0px;
+				line-height: 20px;
+				bottom: -20px;
+				text-indent: 10px;
+			}
+			
+			.colors_box {
+				width: 100%;
+				height: 30px;
+				display: flex;
+			}
+			
+			.colors_box a {
+				flex: 1;
+				height: 100%;
+			}
+			
+			.colors_box a span {
+				display: block;
+				width: 20px;
+				height: 20px;
+				margin: 5px auto;
+			}
+			
+			.clearCanvas {
+				line-height: 30px;
+				font-weight: bold;
+				text-align: center;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="container">
+			<h3 class="tips">提示：</h3>
+			<canvas id="drawing" height="300"></canvas>
+			<div class="colors_box">
+				<a href="javascript:;" class="colors" id="red">
+					<span></span>
+				</a>
+				<a href="javascript:;" class="colors" id="blue">
+					<span></span>
+				</a>
+				<a href="javascript:;" class="colors" id="orange">
+					<span></span>
+				</a>
+				<a href="javascript:;" class="colors" id="black">
+					<span></span>
+				</a>
+				<a href="javascript:;" class="colors" id="green">
+					<span></span>
+				</a>
+				<a href="javascript:;" class="clearCanvas">清除画布</a>
+			</div>
+			<div class="input_contents">
+				<p>312312</p>
+			</div>
+			<div class="users">
+				<div class="row">
+					<div class="user">
+						<img src="imgs/20170904014745.jpg" width="40" height="40" />
+						<input type="text" name="answer1" class="input_box active" value="" />
+					</div>
+					<div class="user">
+						<img src="imgs/20170904014745.jpg" width="40" height="40" />
+						<input type="text" name="answer1" class="input_box" value="" />
+					</div>
+					<div class="user">
+						<img src="imgs/20170904014745.jpg" width="40" height="40" />
+						<input type="text" name="answer1" class="input_box" value="" />
+					</div>
+					<div class="user">
+						<img src="imgs/20170904014745.jpg" width="40" height="40" />
+						<input type="text" name="answer1" class="input_box" value="" />
+					</div>
+					<div class="user">
+						<img src="imgs/20170904014745.jpg" width="40" height="40" />
+						<input type="text" name="answer1" class="input_box" value="" />
+					</div>
+					<div class="user">
+						<img src="imgs/20170904014745.jpg" width="40" height="40" />
+						<input type="text" name="answer1" class="input_box" value="" />
+					</div>
+					<div class="user">
+						<img src="imgs/20170904014745.jpg" width="40" height="40" />
+						<input type="text" name="answer1" class="input_box" value="" />
+					</div>
+					<div class="user">
+						<img src="imgs/20170904014745.jpg" width="40" height="40" />
+						<input type="text" name="answer1" class="input_box" value="" />
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script type="text/javascript">
+			window.onload = function() {
+				var users = document.getElementsByClassName("user");
+				var input_box = document.getElementsByClassName("input_box");
+				var input_content = document.getElementsByClassName("input_contents")[0];
+				var colors = document.getElementsByClassName("colors");
+				var canvas = document.getElementById("drawing");
+				var ctx = canvas.getContext("2d");
+				var clear = document.getElementsByClassName("clearCanvas")[0];
+
+				draw();
+
+				// 设置画笔颜色
+				for(var i = 0; i < colors.length; i++) {
+					var color = colors[i].id;
+					colors[i].children[0].style.backgroundColor = color;
+				}
+
+				for(var i = 0; i < users.length; i++) {
+					users[i].addEventListener('click', showInput, false);
+				}
+
+				function showInput() {
+					for(var j = 0; j < input_box.length; j++) {
+						input_box[j].className = "input_box";
+					}
+					this.children[1].className = "input_box active";
+				}
+
+				var answer = input_content.children[0];
+				console.log(input_content.clientWidth);
+				if(!answer.innerHTML) {
+					alert("请输入答案");
+				} else {
+					var len = 0;
+					answer.style.right = -(answer.clientWidth + 1) + "px";
+					var timer = setInterval(function() {
+						len++;
+						answer.style.right = -(answer.clientWidth + 1) + len + "px";
+						if(len > input_content.clientWidth + answer.clientWidth) {
+							clearInterval(timer);
+							answer.style.display = "none";
+						}
+					}, 20);
+				}
+
+				function draw() {
+					console.log(canvas.offsetLeft);
+					canvas.onmousedown = function(ev) {
+						console.log(ev.clientX);
+						var ev = ev || event;
+						ctx.beginPath();
+						ctx.moveTo(ev.clientX - canvas.offsetLeft, ev.clientY - canvas.offsetTop);
+						document.onmousemove = function(ev) {
+							var ev = ev || event;
+							ctx.lineTo(ev.clientX - canvas.offsetLeft, ev.clientY - canvas.offsetTop);
+							ctx.stroke();
+						}
+						document.onmouseup = function(ev) {
+							document.onmousemove = document.onmouseup = null;
+							ctx.closePath();
+						}
+
+					}
+				}
+
+				clear.addEventListener("click", function(e) {
+					ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+				}, false);
+			}
+		</script>
+
+	</body>
+
+</html>

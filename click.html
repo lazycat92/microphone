@@ -47,6 +47,8 @@
 			var count_num = document.getElementsByClassName("count_num")[0];
 			var count_time = document.getElementsByClassName("count_time")[0];
 			var Transit, count = 0, timing = 0;
+			
+			// 绑定事件，移除事件
 			var bindEvent = {
 				'add': function(id, type, fn, isBubble) {
 					var dom = document.getElementById(id);
@@ -79,6 +81,7 @@
 			bindEvent.add("btn_begin", 'click', beginGame, false);
 			bindEvent.add("btn_reset", 'click', resetGame, false);
 			
+			// 开始
 			function beginGame() {
 				var dom = document.createElement("a");
 				dom.href = "javascript:;";
@@ -107,11 +110,13 @@
 				}, 1000);
 			}
 			
+			// 计数
 			function countClick() {
 				count ++;
 				count_num.innerHTML = count + "次";
 			}
 			
+			// 重置
 			function resetGame() {
 				this.style.display = "none";
 				clearInterval();
