@@ -96,7 +96,7 @@
 						clearInterval(timer);
 						var new_dom = document.createElement("p");
 						new_dom.id = "shadow_box";
-						new_dom.innerHTML = "亲，您的屏幕还好吗";
+						new_dom.innerHTML = "恭喜你，打败了全国" + Math.floor(Math.random()*100) + "%的人";
 						box.appendChild(new_dom);
 						setTimeout(function(){
 							new_dom.style.display = "none";
