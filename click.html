@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>click me</title>
+    <style type="text/css">
+    	body {
+    		margin: 0;
+    		padding: 0;
+    	}
+    	a {
+    		display: block;
+    	}
+    	#shadow_box {
+    		display: block;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100vw;
+			height: 100vh;
+			background: rgba(0,0,0,.5);
+			margin: 0;
+			padding: 0;
+			color: #fff;
+			text-align: center;
+			line-height: 100vh;
+    	}
+    </style>
+</head>
+<body>
+	<div class="container">
+		<a href="javascript:;" id="btn_begin">点击开始游戏</a>
+		<p class="count_time"></p>
+		<p class="count_num"></p>
+	</div>
+	<script type="text/javascript">
+		window.onload = function() {
+			var box = document.getElementsByClassName("container")[0];
+			var btn_begin = document.getElementById("btn_begin");
+			var count_num = document.getElementsByClassName("count_num")[0];
+			var count_time = document.getElementsByClassName("count_time")[0];
+			var Transit, count = 0, timing = 0;
+			var bindEvent = {
+				'add': function(id, type, fn, isBubble) {
+					var dom = document.getElementById(id);
+					if (dom.addEventListener) {
+						dom.addEventListener(type, fn, isBubble);
+					} else if(dom.attachEvent){
+						Transit = function() {
+							fn.call(dom);
+						}
+						dom.attachEvent('on'+type, Transit);
+					} else {
+						dom['on'+type] = fn
+					}
+				},
+				'remove': function(id, type, fn, isBubble) {
+					var dom = document.getElementById(id);
+					if(!isBubble){
+						isBubble = false;
+					}
+					if (dom.removeEventListener) {
+						dom.removeEventListener(type, fn, isBubble);
+					} else if(dom.detachEvent) {
+						dom.detachEvent('on'+type, Transit)
+					} else {
+						dom['on'+type] = null;
+					}
+				}
+			}
+			
+			bindEvent.add("btn_begin", 'click', beginGame, false);
+			
+			function beginGame() {
+				var dom = document.createElement("a");
+				dom.href = "javascript:;";
+				dom.id = "btn_click";
+				dom.innerHTML = "点我";
+				box.appendChild(dom);
+				bindEvent.remove("btn_begin", 'click', beginGame, false);
+				bindEvent.add("btn_click", 'click', countClick, false);
+				count_time.innerHTML = "游戏开始";
+				var timer = setInterval(function(){
+					timing ++;
+					count_time.innerHTML = (2 - timing) + "s";
+					if(timing >= 2) {
+						bindEvent.remove("btn_click", 'click', countClick, false);
+						clearInterval(timer);
+						var new_dom = document.createElement("p");
+						new_dom.id = "shadow_box";
+						new_dom.innerHTML = "亲，您的屏幕还好吗";
+						box.appendChild(new_dom);
+						setTimeout(function(){
+							new_dom.style.display = "none";
+						}, 2000);
+					}
+				}, 1000);
+			}
+			
+			function countClick() {
+				count ++;
+				count_num.innerHTML = count + "次";
+			}
+		}
+	</script>
+</body>
+</html>
