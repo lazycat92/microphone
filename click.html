@@ -28,6 +28,9 @@
 			text-align: center;
 			line-height: 100vh;
     	}
+    	#btn_reset {
+    		display: none;
+    	}
     </style>
 </head>
 <body>
@@ -35,6 +38,7 @@
 		<a href="javascript:;" id="btn_begin">点击开始游戏</a>
 		<p class="count_time"></p>
 		<p class="count_num"></p>
+		<a href="javascript:;" id="btn_reset">重置</a>
 	</div>
 	<script type="text/javascript">
 		window.onload = function() {
@@ -73,13 +77,14 @@
 			}
 			
 			bindEvent.add("btn_begin", 'click', beginGame, false);
+			bindEvent.add("btn_reset", 'clikc', resetGame, false);
 			
 			function beginGame() {
 				var dom = document.createElement("a");
 				dom.href = "javascript:;";
 				dom.id = "btn_click";
 				dom.innerHTML = "点我";
-				box.appendChild(dom);
+				box.insertBefore(dom, document.getElementById("btn_reset"));
 				bindEvent.remove("btn_begin", 'click', beginGame, false);
 				bindEvent.add("btn_click", 'click', countClick, false);
 				count_time.innerHTML = "游戏开始";
@@ -103,6 +108,14 @@
 			function countClick() {
 				count ++;
 				count_num.innerHTML = count + "次";
+			}
+			
+			function resetGame() {
+				box.removeChild(document.getElementById("btn_click"));
+				box.removeChild(document.getElementById("shadow_box"));
+				count_time.innerHTML = "";
+				count_num.innerHTML = "";
+				bindEvent.add("btn_begin", 'click', beginGame, false);
 			}
 		}
 	</script>
